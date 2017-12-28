@@ -8,4 +8,15 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\js\src\App.vue" />
+    <None Include="wwwroot\js\src\assets\logo.png" />
+    <None Include="wwwroot\js\src\main.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\js\dist\bootstrap\" />
+    <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
 </Project>
