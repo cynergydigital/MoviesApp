@@ -8,8 +8,10 @@
         <p class="card-text">
           {{movie.description}}
         </p>
-        <button class="btn btn-primary" v-on:click="editMovie(movie)">Edit</button>
-        <button class="btn btn-secondary" v-on:click="deleteMovie(movie)">Delete</button>
+        <button class="btn btn-primary" v-on:click="editMovie(movie.id)">Edit</button>
+        <button class="btn btn-secondary" v-on:click="deleteMovie(movie.id)">Delete</button>
+        <!--<button class="btn btn-primary" v-on:click="editMovie(movie)">Edit</button>
+        <button class="btn btn-secondary" v-on:click="deleteMovie(movie)">Delete</button>-->
       </div>
     </div>
   </div>
@@ -18,11 +20,15 @@
   export default {
     props: ['movie'],
     methods: {
-      deleteMovie(movie) {
-        this.$emit('delete-movie', movie);
+      //deleteMovie(movie) {
+      //  this.$emit('delete-movie', movie);
+        deleteMovie(id) {
+          this.$emit('delete-movie', id);
       },
-      editMovie(movie) {
-        this.$emit('edit-movie', movie);
+      //editMovie(movie) {
+      //  this.$emit('edit-movie', movie);
+        editMovie(id) {
+          this.$emit('edit-movie', id);
       },
     },
   };
