@@ -10,6 +10,7 @@ gulp.task('copy', function () {
   gulp.src('./node_modules/bootstrap/scss/**').pipe(gulp.dest('./sass/bootstrap'));
   gulp.src('./node_modules/bootstrap/dist/js/**').pipe(gulp.dest('./wwwroot/js/dist/bootstrap'));
   gulp.src('./node_modules/jquery/dist/**').pipe(gulp.dest('./wwwroot/js/dist/jquery'));
+  gulp.src('./node_modules/popper.js/dist/*.js').pipe(gulp.dest('./wwwroot/js/dist/popper'));
   gulp.src('./node_modules/font-awesome-sass/assets/stylesheets/**').pipe(gulp.dest('./sass/fa'));
   gulp.src('./node_modules/font-awesome-sass/assets/fonts/font-awesome/**').pipe(gulp.dest('./wwwroot/fonts'));
 });

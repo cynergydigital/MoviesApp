@@ -1,17 +1,27 @@
 <template>
-  <div id="app" class="row">
-    <movie v-on:delete-movie="deleteMovie" v-for="movie in movies" v-bind:movie="movie"></movie>
-    <add-movie v-on:add-movie="addMovie"></add-movie>
+  <div>
+    <div class="row">
+      <div class="col mt-3">
+        <button class="btn btn-primary" v-on:click="openAddModal">Add Movie</button>
+      </div>
+    </div>
+    <div class="row">
+      <movie v-on:delete-movie="deleteMovie" v-on:edit-movie="editMovie" v-for="movie in movies" v-bind:movie="movie"></movie>
+      <add-movie v-if="showAddModal" v-bind:movie="movieToAdd" v-on:close-add-modal="closeAddModal" v-on:save-movie-add="saveMovieAdd"></add-movie>
+      <edit-movie v-if="showEditModal" v-bind:movie="movieToEdit" v-on:close-edit-modal="closeEditModal" v-on:save-movie-edit="saveMovieEdit"></edit-movie>
+    </div>
   </div>
 </template>
 <script>
   import Movie from './components/Movie'
   import AddMovie from './components/AddMovie'
+  import EditMovie from './components/EditMovie'
   export default {
     name: 'app',
     components: {
       Movie,
-      AddMovie
+      AddMovie,
+      EditMovie
     },
     data() {
       return {
@@ -47,20 +57,65 @@
             description: 'Imprisoned, the mighty Thor finds himself in a lethal gladiatorial contest against the Hulk, his former ally. Thor must fight for survival and race against time to prevent the all-powerful Hela from destroying his home and the Asgardian civilization.'
           },
         ],
+        movieToEdit: {
+          title: '',
+          year: '',
+          director: '',
+          description: ''
+        },
+        editMovieIndex: 0,
+        showEditModal: false,
+        movieToAdd: {
+          title: '',
+          year: '',
+          director: '',
+          description: ''
+        },
+        showAddModal: false
       };
     }, methods: {
       deleteMovie(movie) {
         const movieIndex = this.movies.indexOf(movie);
         this.movies.splice(movieIndex, 1);
       },
-      addMovie(movie) {
-        this.movies.push({
+      editMovie(movie) {
+        this.movieToEdit = {
           title: movie.title,
           year: movie.year,
           director: movie.director,
-          description: movie.description,
-        });
-      }
+          description: movie.description
+        };
+        this.showEditModal = true;
+        this.editMovieIndex = this.movies.indexOf(movie);
+      },
+      closeEditModal() {
+        this.showEditModal = false;
+        this.movieToEdit = {
+          title: '',
+          year: '',
+          director: '',
+          description: ''
+        };
+      },
+      saveMovieEdit() {
+        this.movies[this.editMovieIndex] = this.movieToEdit;
+        this.closeEditModal();
+      },
+      openAddModal() {
+        this.showAddModal = true;
+      },
+      closeAddModal() {
+        this.showAddModal = false;
+        this.movieToAdd = {
+          title: '',
+          year: '',
+          director: '',
+          description: ''
+        };
+      },
+      saveMovieAdd() {
+          this.movies.push(this.movieToAdd);
+      },
     },
   }
 </script>
