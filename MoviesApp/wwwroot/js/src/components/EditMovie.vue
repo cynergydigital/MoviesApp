@@ -1,11 +1,11 @@
 <template>
-  <transition name="addModal">
+  <transition name="editModal">
     <div class="modal modal-mask" style="display: block">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h3 class="modal-title">
-              Add Movie
+              Edit Movie
             </h3>
           </div>
           <div class="modal-body">
@@ -30,8 +30,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" v-on:click="saveMovieAdd">Add Movie</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="closeAddModal">Cancel</button>
+            <button type="button" class="btn btn-primary" v-on:click="saveMovieEdit">Save Changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="closeEditModal">Cancel</button>
           </div>
         </div>
       </div>
@@ -48,14 +48,14 @@
       }
     },
     methods: {
-      closeAddModal() {
-        this.$emit('close-add-modal');
+      closeEditModal() {
+        this.$emit('close-edit-modal');
       },
-      saveMovieAdd() {
+      saveMovieEdit() {
         this.showError = false;
         if (this.movie.title.length > 0 && this.movie.year.length > 0 && this.movie.director.length > 0 && this.movie.description.length > 0) {
-          this.$emit('save-movie-add');
-          this.closeAddModal();
+          this.$emit('save-movie-edit');
+          this.closeEditModal();
         } else {
           this.showError = true;
         }
