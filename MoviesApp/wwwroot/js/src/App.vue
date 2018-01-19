@@ -26,7 +26,7 @@
 		},
 		data() {
 			return {
-				movies: []
+				movies: [],
 				movieToEdit: {
 					title: '',
 					year: '',
