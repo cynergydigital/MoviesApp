@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MoviesApp.Data;
+using Microsoft.Extensions.Caching.Memory;
 using MoviesApp.Models;
+using NoDb;
 
 namespace MoviesApp.Controllers
 {
@@ -14,18 +12,40 @@ namespace MoviesApp.Controllers
     [Route("api/Movies")]
     public class MoviesController : Controller
     {
-        private readonly MovieContext _context;
+        private IBasicCommands<Movie> _movieCommands;
+        private IBasicQueries<Movie> _movieQueries;
+        private IMemoryCache _cache;
+        private const string projectId = "movie-app";
+        private const string moviesCacheKey = "all-movies";
 
-        public MoviesController(MovieContext context)
+        public MoviesController(IBasicCommands<Movie> movieCommands, IBasicQueries<Movie> movieQueries, IMemoryCache memoryCache)
         {
-            _context = context;
+            _movieCommands = movieCommands;
+            _movieQueries = movieQueries;
+            _cache = memoryCache;
         }
 
         // GET: api/Movies
         [HttpGet]
-        public IEnumerable<Movie> GetMovies()
+        public async Task<IEnumerable<Movie>> GetMoviesAsync()
         {
-            return _context.Movies.OrderBy(m=>m.Title);
+            var movies = await GetAllMovies();
+
+            return movies.OrderBy(m => m.Title);
+        }
+
+        private async Task<IEnumerable<Movie>> GetAllMovies()
+        {
+            IEnumerable<Movie> movies;
+            if (_cache.TryGetValue(moviesCacheKey, out movies))
+            {
+                return movies;
+            }
+
+            movies = await _movieQueries.GetAllAsync(projectId).ConfigureAwait(false);
+
+            _cache.Set(moviesCacheKey, movies);
+            return movies;
         }
 
         // GET: api/Movies/5
@@ -37,7 +57,8 @@ namespace MoviesApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var movie = await _context.Movies.SingleOrDefaultAsync(m => m.Id == id);
+            var movies = await GetAllMovies();
+            var movie = movies.FirstOrDefault(m => m.Id == id);
 
             if (movie == null)
             {
@@ -61,23 +82,8 @@ namespace MoviesApp.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(movie).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MovieExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _movieCommands.UpdateAsync(projectId, id.ToString(), movie).ConfigureAwait(false);
+            _cache.Remove(moviesCacheKey);
 
             return NoContent();
         }
@@ -91,8 +97,10 @@ namespace MoviesApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Movies.Add(movie);
-            await _context.SaveChangesAsync();
+            movie.Id = await GetNextIDAsync();
+
+            await _movieCommands.CreateAsync(projectId, movie.Id.ToString(), movie).ConfigureAwait(false);
+            _cache.Remove(moviesCacheKey);
 
             return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
         }
@@ -106,21 +114,27 @@ namespace MoviesApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var movie = await _context.Movies.SingleOrDefaultAsync(m => m.Id == id);
+            var movies = await GetAllMovies();
+            var movie = movies.FirstOrDefault(m => m.Id == id);
             if (movie == null)
             {
                 return NotFound();
             }
 
-            _context.Movies.Remove(movie);
-            await _context.SaveChangesAsync();
+            await _movieCommands.DeleteAsync(projectId, id.ToString()).ConfigureAwait(false);
+            _cache.Remove(moviesCacheKey);
 
             return Ok(movie);
         }
 
-        private bool MovieExists(int id)
+        private async Task<int> GetNextIDAsync()
         {
-            return _context.Movies.Any(e => e.Id == id);
+            var movies = await _movieQueries.GetAllAsync(projectId).ConfigureAwait(false);
+            if (movies.Any())
+            {
+                return movies.Max(m => m.Id) + 1;
+            }
+            return 1;
         }
     }
 }
