@@ -2,12 +2,10 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: './wwwroot/js/src/main.js',
-  output: {
-    path: path.resolve(__dirname, './wwwroot/js/dist'),
-    publicPath: '/js/dist/',
-    filename: 'build.js'
-  },
+	entry: ["./app/main.js", "./Sass/movies.scss"],
+	output: {
+		filename: './wwwroot/js/bundle.js'
+	},
   module: {
     rules: [
       {
@@ -16,15 +14,32 @@ module.exports = {
           'vue-style-loader',
           'css-loader'
         ],
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          'vue-style-loader',
-          'css-loader',
-          'sass-loader'
-        ],
-      },
+		},
+	    {
+		    test: /\.scss$/,
+		    use: [
+			    {
+				    loader: 'file-loader',
+				    options: {
+					    name: 'movies.css',
+					    outputPath: './wwwroot/css/'
+				    }
+			    },
+			    {
+				    loader: 'extract-loader'
+			    },
+			    {
+				    loader: 'css-loader',
+				    options: { minimize: true }
+			    },
+			    {
+				    loader: 'postcss-loader'
+			    },
+			    {
+				    loader: 'sass-loader'
+			    }
+		    ]
+	    },
       {
         test: /\.sass$/,
         use: [

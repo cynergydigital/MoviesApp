@@ -6,7 +6,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<movie v-on:delete-movie="deleteMovie" v-on:edit-movie="editMovie" v-for="movie in movies" v-bind:movie="movie"></movie>
+			<movie v-on:delete-movie="deleteMovie" v-on:edit-movie="editMovie" v-for="movie in movies" v-bind:movie="movie" v-bind:key="movie.id"></movie>
 			<add-movie v-if="showAddModal" v-bind:movie="movieToAdd" v-on:close-add-modal="closeAddModal" v-on:save-movie-add="saveMovieAdd"></add-movie>
 			<edit-movie v-if="showEditModal" v-bind:movie="movieToEdit" v-on:close-edit-modal="closeEditModal" v-on:save-movie-edit="saveMovieEdit"></edit-movie>
 		</div>
