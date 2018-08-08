@@ -1,4 +1,4 @@
-#Movie DB (Vue Web App)
+# Movie DB (Vue Web App)
 This project is meant to provide an example application of a .Net Core, Vue web application
 Technologies Used:
 * .NET Core 2.0
