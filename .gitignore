@@ -264,5 +264,5 @@ __pycache__/
 nodb_storage
 
 # Compiled files
-wwwroot/css
-wwwroot/js
+/MoviesApp/wwwroot/css
+/MoviesApp/wwwroot/js
