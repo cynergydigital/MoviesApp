@@ -2,7 +2,7 @@
 This project is meant to provide an example application of a .Net Core, Vue web application
 Technologies Used:
 * .NET Core 2.0
-* Vue ??
+* Vue 2.5.X
 * NoDB (for data storage)
 * SASS (for CSS development)
 * webpack (for compiling and loading packages)
@@ -28,4 +28,6 @@ Once the application starts, add several movies, use the edit and delete feature
 Use this as a starting point for new features
 * Expand the data to include cast and characters
 * Add more properties to the movies like ratings or trailer URL
+* Add movie Posters
 * Update the UI to include sorting or searching
+* Use OMDb API to add movies
