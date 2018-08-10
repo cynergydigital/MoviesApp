@@ -262,3 +262,7 @@ __pycache__/
 
 # Custom Folders
 nodb_storage
+
+# Compiled files
+wwwroot/css
+wwwroot/js
