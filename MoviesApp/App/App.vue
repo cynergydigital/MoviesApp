@@ -33,7 +33,6 @@
 					director: '',
 					description: ''
 				},
-				editMovieIndex: 0,
 				showEditModal: false,
 				movieToAdd: {
 					title: '',
