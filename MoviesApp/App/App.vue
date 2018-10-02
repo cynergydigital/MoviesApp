@@ -6,21 +6,21 @@
 			</div>
 		</div>
 		<div class="row">
-			<movie v-on:delete-movie="deleteMovie" v-on:edit-movie="editMovie" v-for="movie in movies" v-bind:movie="movie" v-bind:key="movie.id"></movie>
+			<display-movie v-on:delete-movie="deleteMovie" v-on:edit-movie="editMovie" v-for="movie in movies" v-bind:movie="movie" v-bind:key="movie.id"></display-movie>
 			<add-movie v-if="showAddModal" v-bind:movie="movieToAdd" v-on:close-add-modal="closeAddModal" v-on:save-movie-add="saveMovieAdd"></add-movie>
 			<edit-movie v-if="showEditModal" v-bind:movie="movieToEdit" v-on:close-edit-modal="closeEditModal" v-on:save-movie-edit="saveMovieEdit"></edit-movie>
 		</div>
 	</div>
 </template>
 <script>
-	import Movie from './components/Movie'
+	import DisplayMovie from './components/DisplayMovie'
 	import AddMovie from './components/AddMovie'
 	import EditMovie from './components/EditMovie'
 	import axios from 'axios'
 	export default {
 		name: 'app',
 		components: {
-			Movie,
+			DisplayMovie,
 			AddMovie,
 			EditMovie
 		},
@@ -90,10 +90,10 @@
 					method: 'PUT', 'url': '/api/movies/' + this.movieToEdit.id, 'data': this.movieToEdit
 				}).then(result => {
 					this.getMovies();
+					this.closeEditModal();
 				}, error => {
 					console.error(error);
 				});
-				this.closeEditModal();
 			},
 			openAddModal() {
 				this.showAddModal = true;
@@ -112,6 +112,7 @@
 					method: 'POST', 'url': '/api/movies', 'data': this.movieToAdd
 				}).then(result => {
 					this.getMovies();
+					this.closeAddModal();
 				}, error => {
 					console.error(error);
 				});
