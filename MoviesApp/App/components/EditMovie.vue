@@ -55,7 +55,6 @@
 				this.showError = false;
 				if (this.movie.title.length > 0 && this.movie.year > 0 && this.movie.director.length > 0 && this.movie.description.length > 0) {
 					this.$emit('save-movie-edit');
-					this.closeEditModal();
 				} else {
 					this.showError = true;
 				}

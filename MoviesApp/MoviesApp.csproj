@@ -16,7 +16,7 @@
     <Content Include="App\App.vue" />
     <Content Include="App\components\AddMovie.vue" />
     <Content Include="App\components\EditMovie.vue" />
-    <Content Include="App\components\Movie.vue" />
+    <Content Include="App\components\DisplayMovie.vue" />
     <Content Include="App\main.js" />
   </ItemGroup>
   <ItemGroup>
